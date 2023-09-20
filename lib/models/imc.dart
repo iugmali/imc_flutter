@@ -1,15 +1,31 @@
-class IMC {
+import 'package:flutter/material.dart';
+import 'package:imc_flutter/exceptions/imc_exceptions.dart';
+
+class Imc {
+  final String _id = UniqueKey().toString();
   double _peso;
   double _altura;
 
-  IMC(this._peso, this._altura);
-
-  double calculaIMC() {
-    return _peso / (_altura * _altura);
+  Imc(this._peso, this._altura){
+    _validate();
   }
 
-  String resultadoIMC() {
-    double imc = calculaIMC();
+  void _validate() {
+    if (_peso <= 0) {
+      throw PesoInvalidoException();
+    }
+    if (_altura <= 0) {
+      throw AlturaInvalidaException();
+    }
+  }
+
+  String get id => _id;
+  double get peso => _peso;
+  double get altura => _altura;
+
+  double get imc => _peso / (_altura * _altura);
+
+  String get resultadoImc {
     if (imc < 16) {
       return "magreza grave";
     } else if (imc < 17) {

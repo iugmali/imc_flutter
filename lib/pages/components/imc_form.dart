@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ImcForm extends StatefulWidget {
   final void Function(double altura, double peso) save;
@@ -11,7 +12,8 @@ class ImcForm extends StatefulWidget {
 class _ImcFormState extends State<ImcForm> {
   final _alturaController = TextEditingController();
   final _pesoController = TextEditingController();
-  _submitForm() {
+
+  void _submitForm() {
     final altura = double.tryParse(_alturaController.text) ?? 0.0;
     final peso = double.tryParse(_pesoController.text) ?? 0.0;
     if (altura <= 0 || peso <= 0) {
@@ -31,12 +33,23 @@ class _ImcFormState extends State<ImcForm> {
           TextField(
             controller: _alturaController,
             keyboardType: const TextInputType.numberWithOptions(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]?[0-9]*')),
+              TextInputFormatter.withFunction(
+                    (oldValue, newValue) => newValue.copyWith(
+                  text: newValue.text.replaceAll(',', '.'),
+                ),
+              ),
+            ],
             decoration:
             const InputDecoration(label: Text('Altura (m)')),
           ),
           TextField(
             controller: _pesoController,
             keyboardType: const TextInputType.numberWithOptions(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]*')),
+            ],
             decoration:
             const InputDecoration(label: Text('Peso (kg)')),
           ),

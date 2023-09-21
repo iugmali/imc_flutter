@@ -12,6 +12,7 @@ Aplicativo desenvolvido seguindo desafio proposto por [web.dio.me](https://web.d
 ## Rodando a aplicação
 
 ```
+flutter pub get
 flutter run
 ```
 

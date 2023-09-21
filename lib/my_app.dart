@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Calculadora IMC',
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
       home: const ImcPage(),

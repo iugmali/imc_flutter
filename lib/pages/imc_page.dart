@@ -11,7 +11,7 @@ class ImcPage extends StatefulWidget {
 
 class _ImcPageState extends State<ImcPage> {
   var imcRepository = ImcRepository();
-  List<Imc>? _imcs;
+  List<Imc> _imcs = [];
 
   @override
   void initState() {
@@ -50,10 +50,17 @@ class _ImcPageState extends State<ImcPage> {
       appBar: AppBar(
         title: const Text("Calculadora IMC"),
       ),
-      body: ListView.builder(
-          itemCount: _imcs!.length,
+      body: (_imcs.length == 0) ?
+          const Padding(
+            padding:  EdgeInsets.all(16.0),
+            child: Center(
+              child: Text("Ainda não existem IMCs adicionados. Adicione um IMC pressionando o botão do canto inferior direito e em seguida digite altura e peso.", textAlign: TextAlign.justify,),
+            ),
+          ) : ListView.separated(
+          separatorBuilder: (BuildContext bc, i) => const Divider(),
+          itemCount: _imcs.length,
           itemBuilder: (BuildContext bc, i) {
-            var imc = _imcs![i];
+            var imc = _imcs[i];
             return Dismissible(
                 key: Key(imc.id),
                 onDismissed: (direction) async {

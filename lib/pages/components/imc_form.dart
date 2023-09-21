@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:imc_flutter/utils/regex_formatter.dart';
 
 class ImcForm extends StatefulWidget {
   final void Function(double altura, double peso) save;
@@ -34,7 +35,7 @@ class _ImcFormState extends State<ImcForm> {
             controller: _alturaController,
             keyboardType: const TextInputType.numberWithOptions(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]?[0-9]*')),
+              RegexFormatter(RegExp(r'[0-2]([,.][0-9]*)?')),
               TextInputFormatter.withFunction(
                     (oldValue, newValue) => newValue.copyWith(
                   text: newValue.text.replaceAll(',', '.'),
@@ -48,7 +49,7 @@ class _ImcFormState extends State<ImcForm> {
             controller: _pesoController,
             keyboardType: const TextInputType.numberWithOptions(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]*')),
+              RegexFormatter(RegExp(r'[0-9][0-9]?[0-9]?')),
             ],
             decoration:
             const InputDecoration(label: Text('Peso (kg)')),

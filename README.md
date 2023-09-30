@@ -1,12 +1,21 @@
 # imc_flutter
 
-Aplicativo desenvolvido seguindo desafio proposto por [web.dio.me](https://web.dio.me) de criar uma calculadora de IMC (índice de massa corporal) em flutter.
+Aplicativo desenvolvido seguindo desafios propostos por [web.dio.me](https://web.dio.me) de criar uma calculadora de IMC (índice de massa corporal) em flutter.
 
-## Checklist do desafio
+## Checklist do primeiro desafio
 
 - [x] Criar classe IMC (Peso / Altura)
 - [x] Ler dados no app
 - [x] Calcular IMC
+- [x] Exibir em uma lista
+
+## Checklist do segundo desafio
+
+- [x] Criar classe IMC (Peso / Altura)
+- [ ] Altura ler em tela de Configurações
+- [x] Ler dados no app
+- [x] Calcular IMC
+- [ ] Gravar dados no Hive ou SQLite
 - [x] Exibir em uma lista
 
 ## Rodando a aplicação

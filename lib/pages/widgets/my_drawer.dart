@@ -11,8 +11,8 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   var storage = SharedPreferencesService();
-  late String _username ;
-  late String _altura;
+  String _username = "";
+  String _altura = "";
 
   @override
   void initState() {
@@ -24,6 +24,9 @@ class _MyDrawerState extends State<MyDrawer> {
     _username = await storage.getUsername();
     double altura = await storage.getAltura();
     _altura = altura.toString().replaceAll('.', ',');
+    setState(() {
+
+    });
   }
 
   @override
@@ -48,8 +51,30 @@ class _MyDrawerState extends State<MyDrawer> {
                       "https://branditechture.agency/brand-logos/wp-content/uploads/wpdm-cache/imperial-machine-company-imc-logo-vector-900x0.png"),
                 ),
                 accountName: Text(_username),
-                accountEmail: Text(_altura)
+                accountEmail: Text("Altura: ${_altura}m")
             ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ConfigurationPage()));
+            },
+            child: Container(
+                padding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                width: double.infinity,
+                child: const Row(
+                  children:  [
+                    Icon(Icons.person),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text("Configurações"),
+                  ],
+                )),
           ),
         ],
       ),

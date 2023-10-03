@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imc_flutter/models/imc.dart';
 import 'package:imc_flutter/pages/widgets/imc_form.dart';
+import 'package:imc_flutter/pages/widgets/my_drawer.dart';
 import 'package:imc_flutter/repositories/imc_repository.dart';
 
 class ImcPage extends StatefulWidget {
@@ -10,7 +11,7 @@ class ImcPage extends StatefulWidget {
 }
 
 class _ImcPageState extends State<ImcPage> {
-  var imcRepository = ImcRepository();
+  late ImcRepository imcRepository;
   List<Imc> _imcs = [];
 
   @override
@@ -20,10 +21,10 @@ class _ImcPageState extends State<ImcPage> {
   }
 
   void _listarImcs() async {
-    _imcs = await imcRepository.listar();
-    if (mounted) {
-      setState(() {});
-    }
+    imcRepository = await ImcRepository.carregar();
+    setState(() {
+      _imcs = imcRepository.listar();
+    });
   }
 
   void _adicionaImcDialog() {
@@ -50,11 +51,12 @@ class _ImcPageState extends State<ImcPage> {
       appBar: AppBar(
         title: const Text("Calculadora IMC"),
       ),
-      body: (_imcs.length == 0) ?
+      drawer: const MyDrawer(),
+      body: (_imcs.isEmpty) ?
           const Padding(
             padding:  EdgeInsets.all(16.0),
             child: Center(
-              child: Text("Ainda não existem IMCs adicionados. Adicione um IMC pressionando o botão do canto inferior direito e em seguida digite altura e peso.", textAlign: TextAlign.justify,),
+              child: Text("Ainda não existem IMCs adicionados. Adicione um IMC pressionando o botão do canto inferior direito e em seguida digite o peso.", textAlign: TextAlign.justify,),
             ),
           ) : ListView.separated(
           separatorBuilder: (BuildContext bc, i) => const Divider(),
@@ -64,19 +66,14 @@ class _ImcPageState extends State<ImcPage> {
             return Dismissible(
                 key: Key(imc.id),
                 onDismissed: (direction) async {
-                  await imcRepository.remover(imc.id);
+                  await imcRepository.remover(imc);
                   _listarImcs();
                 },
                 direction: DismissDirection.endToStart,
                 child: ListTile(
+                  leading: Text("${imc.date.day}/${imc.date.month}/${imc.date.year}"),
                   title: Text(imc.resultadoImc),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Altura: ${imc.altura.toStringAsFixed(2).replaceAll('.', ',')}"),
-                      Text("Peso: ${imc.peso.toStringAsFixed(0)}"),
-                    ],
-                  ),
+                  trailing: Text("Peso: ${imc.peso.toStringAsFixed(0)} kg"),
                 )
             );
           }

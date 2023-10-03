@@ -17,18 +17,22 @@ class ImcAdapter extends TypeAdapter<Imc> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Imc(
-      fields[0] as double,
-      fields[1] as double,
+      fields[2] as double,
+      fields[3] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, Imc obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj._peso)
+      ..write(obj._id)
       ..writeByte(1)
+      ..write(obj._createdAt)
+      ..writeByte(2)
+      ..write(obj._peso)
+      ..writeByte(3)
       ..write(obj._altura);
   }
 

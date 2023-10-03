@@ -1,20 +1,34 @@
+import 'package:hive/hive.dart';
 import 'package:imc_flutter/models/imc.dart';
 
+const IMC_MODEL = "imcModel";
+
 class ImcRepository {
-  final List<Imc> _imcs = [];
+  static late Box _box;
 
-  Future<void> adicionar(Imc imc) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _imcs.add(imc);
+  ImcRepository._criar();
+
+  static Future<ImcRepository> carregar() async {
+    if (Hive.isBoxOpen(IMC_MODEL)) {
+      _box = Hive.box(IMC_MODEL);
+    } else {
+      _box = await Hive.openBox(IMC_MODEL);
+    }
+    return ImcRepository._criar();
   }
 
-  Future<void> remover(String id) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _imcs.remove(_imcs.where((imc) => imc.id == id).first);
+  adicionar(Imc imc) async {
+    _box.add(imc);
   }
 
-  Future<List<Imc>> listar() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    return _imcs;
+  remover(Imc imc) async {
+    imc.delete();
   }
+
+  List<Imc> listar() {
+      return _box.values
+          .cast<Imc>()
+          .toList();
+  }
+
 }

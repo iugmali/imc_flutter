@@ -6,13 +6,17 @@ part 'imc.g.dart';
 
 @HiveType(typeId: 1)
 class Imc extends HiveObject {
+  @HiveField(0)
   final String _id = UniqueKey().toString();
 
-  @HiveField(0)
-  double _peso;
-
   @HiveField(1)
-  double _altura;
+  final DateTime _createdAt = DateTime.now();
+
+  @HiveField(2)
+  final double _peso;
+
+  @HiveField(3)
+  final double _altura;
 
   Imc(this._peso, this._altura){
     _validate();
@@ -28,6 +32,7 @@ class Imc extends HiveObject {
   }
 
   String get id => _id;
+  DateTime get date => _createdAt;
   double get peso => _peso;
   double get altura => _altura;
 

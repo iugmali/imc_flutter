@@ -12,10 +12,10 @@ Aplicativo desenvolvido seguindo desafios propostos por [web.dio.me](https://web
 ## Checklist do segundo desafio
 
 - [x] Criar classe IMC (Peso / Altura)
-- [ ] Altura ler em tela de Configurações
+- [x] Altura ler em tela de Configurações
 - [x] Ler dados no app
 - [x] Calcular IMC
-- [ ] Gravar dados no Hive ou SQLite
+- [x] Gravar dados no Hive ou SQLite
 - [x] Exibir em uma lista
 
 ## Rodando a aplicação

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:imc_flutter/services/shared_preferences_service.dart';
 import 'package:imc_flutter/utils/regex_formatter.dart';
 
 class ImcForm extends StatefulWidget {
@@ -11,17 +12,16 @@ class ImcForm extends StatefulWidget {
 }
 
 class _ImcFormState extends State<ImcForm> {
-  final _alturaController = TextEditingController();
+  var storage = SharedPreferencesService();
   final _pesoController = TextEditingController();
 
-  void _submitForm() {
-    final altura = double.tryParse(_alturaController.text) ?? 0.0;
+  void _submitForm() async {
     final peso = double.tryParse(_pesoController.text) ?? 0.0;
-    if (altura <= 0 || peso <= 0) {
+    if (peso <= 0) {
       return;
     }
+    final altura = await storage.getAltura();
     widget.save(altura, peso);
-    _alturaController.clear();
     _pesoController.clear();
   }
 
@@ -29,22 +29,8 @@ class _ImcFormState extends State<ImcForm> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Adicionar IMC'),
-      content: Column(
+      content: Wrap(
         children: [
-          TextField(
-            controller: _alturaController,
-            keyboardType: const TextInputType.numberWithOptions(),
-            inputFormatters: <TextInputFormatter>[
-              RegexFormatter(RegExp(r'[0-2]([,.][0-9]*)?')),
-              TextInputFormatter.withFunction(
-                    (oldValue, newValue) => newValue.copyWith(
-                  text: newValue.text.replaceAll(',', '.'),
-                ),
-              ),
-            ],
-            decoration:
-            const InputDecoration(label: Text('Altura (m)')),
-          ),
           TextField(
             controller: _pesoController,
             keyboardType: const TextInputType.numberWithOptions(),

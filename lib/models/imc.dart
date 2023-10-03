@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:imc_flutter/exceptions/imc_exceptions.dart';
 
-class Imc {
+part 'imc.g.dart';
+
+@HiveType(typeId: 1)
+class Imc extends HiveObject {
   final String _id = UniqueKey().toString();
+
+  @HiveField(0)
   double _peso;
+
+  @HiveField(1)
   double _altura;
 
   Imc(this._peso, this._altura){

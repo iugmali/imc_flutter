@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imc_flutter/models/imc.dart';
-import 'package:imc_flutter/pages/components/imc_form.dart';
+import 'package:imc_flutter/pages/widgets/imc_form.dart';
 import 'package:imc_flutter/repositories/imc_repository.dart';
 
 class ImcPage extends StatefulWidget {
@@ -73,7 +73,7 @@ class _ImcPageState extends State<ImcPage> {
                   trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Altura: ${imc.altura.toStringAsFixed(2)}"),
+                      Text("Altura: ${imc.altura.toStringAsFixed(2).replaceAll('.', ',')}"),
                       Text("Peso: ${imc.peso.toStringAsFixed(0)}"),
                     ],
                   ),

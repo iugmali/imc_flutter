@@ -104,10 +104,9 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             TextField(
               controller: _usernameController,
               inputFormatters: <TextInputFormatter>[
-                RegexFormatter(RegExp(r'([a-z][0-9])*')),
+                RegexFormatter(RegExp(r'[a-z]{1,16}')),
               ],
-              decoration:
-              const InputDecoration(label: Text('Nome de usuário')),
+              decoration: const InputDecoration(label: Text('Nome de usuário')),
             ),
             TextField(
               controller: _alturaController,
@@ -120,13 +119,12 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
                   ),
                 ),
               ],
-              decoration:
-              const InputDecoration(label: Text('Altura (m)')),
+              decoration: const InputDecoration(label: Text('Altura (m)')),
             ),
             const SizedBox(
               height: 16,
             ),
-            ElevatedButton(onPressed: _submitForm, child: Text("Salvar"))
+            ElevatedButton(onPressed: _submitForm, child: const Text("Salvar"))
           ],
         ),
       ),

@@ -47,41 +47,50 @@ class _ImcPageState extends State<ImcPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Calculadora IMC"),
-      ),
-      drawer: const MyDrawer(),
-      body: (_imcs.isEmpty) ?
-          const Padding(
-            padding:  EdgeInsets.all(16.0),
-            child: Center(
-              child: Text("Ainda não existem IMCs adicionados. Adicione um IMC pressionando o botão do canto inferior direito e em seguida digite o peso.", textAlign: TextAlign.justify,),
-            ),
-          ) : ListView.separated(
-          separatorBuilder: (BuildContext bc, i) => const Divider(),
-          itemCount: _imcs.length,
-          itemBuilder: (BuildContext bc, i) {
-            var imc = _imcs[i];
-            return Dismissible(
-                key: Key(imc.id),
-                onDismissed: (direction) async {
-                  await imcRepository.remover(imc);
-                  _listarImcs();
-                },
-                direction: DismissDirection.endToStart,
-                child: ListTile(
-                  leading: Text("${imc.date.day}/${imc.date.month}/${imc.date.year}"),
-                  title: Text(imc.resultadoImc),
-                  trailing: Text("Peso: ${imc.peso.toStringAsFixed(0)} kg"),
-                )
-            );
-          }
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Adicionar IMC',
-        onPressed: _adicionaImcDialog,
-        child: const Icon(Icons.add),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Calculadora IMC"),
+        ),
+        drawer: const MyDrawer(),
+        body: (_imcs.isEmpty) ?
+            const Padding(
+              padding:  EdgeInsets.all(16.0),
+              child: Center(
+                child: Text("Ainda não existem IMCs adicionados. Adicione um IMC pressionando o botão do canto inferior direito e em seguida digite o peso.", textAlign: TextAlign.justify,),
+              ),
+            ) : ListView.separated(
+            separatorBuilder: (BuildContext bc, i) => const Divider(),
+            itemCount: _imcs.length,
+            itemBuilder: (BuildContext bc, i) {
+              var imc = _imcs[i];
+              String formattedDate = "${(imc.date.day < 10) ? '0${imc.date.day}' : imc.date.day}/${imc.date.month}/${imc.date.year}";
+              return Dismissible(
+                  key: Key(imc.id),
+                  onDismissed: (direction) async {
+                    await imcRepository.remover(imc);
+                    _listarImcs();
+                  },
+                  direction: DismissDirection.endToStart,
+                  child: ListTile(
+                    leading: Text(formattedDate),
+                    title: Text(imc.resultadoImc),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Altura: ${imc.altura.toStringAsFixed(2).replaceAll('.', ',')}m"),
+                        Text("Peso: ${imc.peso.toStringAsFixed(0)}kg"),
+                      ],
+                    ),
+                  )
+              );
+            }
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: 'Adicionar IMC',
+          onPressed: _adicionaImcDialog,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

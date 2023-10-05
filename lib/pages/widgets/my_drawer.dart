@@ -12,7 +12,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   var storage = SharedPreferencesService();
   String _username = "";
-  String _altura = "";
+  String _altura = "Altura não configurada";
 
   @override
   void initState() {
@@ -23,9 +23,10 @@ class _MyDrawerState extends State<MyDrawer> {
   _carregarDados() async {
     _username = await storage.getUsername();
     double altura = await storage.getAltura();
-    _altura = altura.toString().replaceAll('.', ',');
     setState(() {
-
+      if (altura > 0) {
+        _altura = "${altura.toStringAsFixed(2).replaceAll('.', ',')}m";
+      }
     });
   }
 
@@ -37,21 +38,19 @@ class _MyDrawerState extends State<MyDrawer> {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ConfigurationPage()));
+              // Navigator.pop(context);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const ConfigurationPage()));
             },
             child: UserAccountsDrawerHeader(
-                decoration: const BoxDecoration(color: Colors.orange),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Image.network(
-                      "https://branditechture.agency/brand-logos/wp-content/uploads/wpdm-cache/imperial-machine-company-imc-logo-vector-900x0.png"),
+                  child: Text(_username),
                 ),
                 accountName: Text(_username),
-                accountEmail: Text("Altura: ${_altura}m")
+              accountEmail: Text(_altura),
             ),
           ),
           InkWell(

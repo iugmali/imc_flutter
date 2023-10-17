@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:imc_flutter/models/imc.dart';
-import 'package:imc_flutter/pages/widgets/imc_form.dart';
-import 'package:imc_flutter/pages/widgets/my_drawer.dart';
 import 'package:imc_flutter/repositories/imc_repository.dart';
+import 'package:imc_flutter/widgets/imc_form.dart';
+import 'package:imc_flutter/widgets/my_drawer.dart';
 
 class ImcPage extends StatefulWidget {
   const ImcPage({super.key});
@@ -67,20 +67,58 @@ class _ImcPageState extends State<ImcPage> {
               String formattedDate = "${(imc.date.day < 10) ? '0${imc.date.day}' : imc.date.day}/${imc.date.month}/${imc.date.year}";
               return Dismissible(
                   key: Key(imc.id),
+                  confirmDismiss: (DismissDirection direction) async {
+                    return await showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: const Text("Remover Registro"),
+                            content: const Text("Deseja remover o registro de IMC salvo?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('Cancelar')
+                              ),
+                              ElevatedButton(
+                                style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.red)),
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text('Remover IMC'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
                   onDismissed: (direction) async {
-                    await imcRepository.remover(imc);
+                    imcRepository.remover(imc);
                     _listarImcs();
                   },
                   direction: DismissDirection.endToStart,
-                  child: ListTile(
-                    leading: Text(formattedDate),
-                    title: Text(imc.resultadoImc),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Altura: ${imc.altura.toStringAsFixed(2).replaceAll('.', ',')}m"),
-                        Text("Peso: ${imc.peso.toStringAsFixed(0)}kg"),
+                  background: Container(decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.redAccent,
+                        Colors.red,
                       ],
+                      stops: [
+                      0.15,
+                      0.90,
+                      ]),
+                    ),
+                  ),
+                  child: Card(
+                    elevation: 5,
+                    child: ListTile(
+                      leading: Text(formattedDate),
+                      title: Text(imc.resultadoImc),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Altura: ${imc.altura.toStringAsFixed(2).replaceAll('.', ',')}m"),
+                          Text("Peso: ${imc.peso.toStringAsFixed(0)}kg"),
+                        ],
+                      ),
                     ),
                   )
               );
